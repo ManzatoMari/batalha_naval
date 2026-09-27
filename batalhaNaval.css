@@ -1,0 +1,284 @@
+
+:root {
+    --fundo: #081c29;          /* mar profundo */
+    --fundo-painel: #0d2c3f;   /* moldura do mapa */
+    --linha: rgba(255, 255, 255, 0.14);
+
+    --mar: #0e64aa;            
+    --mar-clara: #80a2b1;      
+    --agua: #307ebd;           
+    --acerto: #79f37f;         
+    --afundado: #bd422c;       
+    --texto: #f1fbff;
+    --texto-suave: #bfd7e4;
+
+    
+    --celula: clamp(22px, calc((100vw - 100px) / 10), 52px);
+    --espaco: 3px;
+}
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 24px 16px 40px;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    line-height: 1.4;
+}
+h1, h2, p {
+    margin: 0;
+}
+
+
+.jogo {
+    display: grid;
+    grid-template-columns: auto minmax(220px, 280px);
+    gap: 28px 44px;
+    justify-content: center;
+    align-items: start;
+}
+.cabecalho {
+    grid-column: 1 / -1;
+}
+.cabecalho h1 {
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+}
+.cabecalho p {
+    margin-top: 8px;
+    max-width: 46ch;
+    color: var(--texto-suave);
+}
+
+
+.status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 32px;
+    margin-bottom: 14px;
+}
+.numeros {
+    display: flex;
+    gap: 28px;
+}
+.rotulo {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+}
+.valor {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+.mensagem {
+    flex: 1 1 200px;
+    min-height: 2.8em;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+.mensagem.vitoria {
+    color: var(--acerto);
+}
+
+
+
+
+
+.tabuleiro {
+    display: inline-grid;
+    grid-template-columns: 20px repeat(10, var(--celula));
+    gap: var(--espaco);
+    padding: 8px;
+    background: var(--fundo-painel);
+    border: 1px solid var(--linha);
+    border-radius: 8px;
+}
+.rotulo-eixo {
+    display: grid;
+    place-items: center;
+    font-size: 0.75rem;
+    color: var(--texto-suave);
+    font-variant-numeric: tabular-nums;
+}
+.celula {
+    width: var(--celula);
+    height: var(--celula);
+    padding: 0;
+    border: 0;
+    border-radius: 3px;
+    background: var(--mar);
+    display: grid;
+    place-items: center;
+    cursor: crosshair;
+    transition: background-color 0.15s;
+}
+.celula img {
+    width: 68%;
+    height: 68%;
+    opacity: 0.45;
+    pointer-events: none;   /* o clique sempre cai no botão, nunca na imagem */
+}
+.celula:not(:disabled):hover {
+    background: var(--mar-clara);
+}
+.celula:focus-visible {
+    outline: 3px solid var(--acerto);
+    outline-offset: 2px;
+}
+.celula:disabled {
+    cursor: default;
+}
+/* Estados depois do tiro */
+.celula.agua {
+    background: var(--agua);
+}
+.celula.agua img {
+    opacity: 0.6;
+    animation: surgir 0.25s ease-out;
+}
+.celula.acerto {
+    background: var(--acerto);
+}
+.celula.acerto img {
+    opacity: 1;
+    animation: surgir 0.25s ease-out;
+}
+.celula.afundado {
+    background: var(--afundado);
+}
+.celula.afundado img {
+    opacity: 1;
+    filter: invert(1);      /* ícone preto vira branco sobre o vermelho */
+    animation: afundar 0.4s ease-out;
+}
+@keyframes surgir {
+    from { transform: scale(0.4); opacity: 0; }
+}
+@keyframes afundar {
+    from { transform: translateY(-30%) scale(1.3); opacity: 0; }
+}
+
+/* ---------- Painel da frota ---------- */
+.painel h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.frota {
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+}
+.navio-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--linha);
+}
+.navio-icone {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    background: var(--agua);
+    border-radius: 4px;
+}
+.navio-icone img {
+    width: 70%;
+    height: 70%;
+}
+.navio-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.navio-nome {
+    font-weight: 600;
+}
+.navio-estado {
+    font-size: 0.85rem;
+    color: var(--texto-suave);
+}
+.segmentos {
+    display: flex;
+    gap: 3px;
+    margin-top: 4px;
+}
+.segmento {
+    width: 18px;
+    height: 8px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.18);
+}
+.segmento.atingido {
+    background: var(--acerto);
+}
+
+
+.navio-item.afundado .navio-icone {
+    background: var(--afundado);
+}
+.navio-item.afundado .navio-icone img {
+    filter: invert(1);
+}
+.navio-item.afundado .segmento {
+    background: #d8432e;
+}
+.navio-item.afundado .navio-estado {
+    color: var(--texto);
+    font-weight: 600;
+}
+
+
+.btn-reiniciar {
+    width: 100%;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--acerto);
+    color: var(--fundo);
+    font: inherit;
+    font-weight: 800;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: background-color 0.15s, transform 0.1s;
+}
+
+.btn-reiniciar:hover {
+    background: #f6bd57;
+}
+
+.btn-reiniciar:active {
+    transform: scale(0.98);
+}
+
+.btn-reiniciar:focus-visible {
+    outline: 3px solid var(--texto);
+    outline-offset: 3px;
+}
+
+
+@media (max-width: 720px) {
+    .jogo {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+    }
+
+    .cabecalho,
+    .campo,
+    .painel {
+        width: 100%;
+        max-width: 420px;
+    }
+}
+

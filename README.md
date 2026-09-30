@@ -1,5 +1,8 @@
 # Batalha Naval
 
+  Acesse o site do jogo!
+  ## https://manzatomari.github.io/batalha_naval/
+
 Jogo de Batalha Naval feito em JavaScript, HTML e CSS.
 
 Há três navios de tamanhos diferentes escondidos no tabuleiro: 
